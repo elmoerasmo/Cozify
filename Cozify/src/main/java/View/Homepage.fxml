@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #F5F7FA;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="Controller.HomepageController">
+   <children>
+      <Label alignment="CENTER" layoutY="216.0" prefHeight="50.0" prefWidth="258.0" text="Simplify Properti, Maximize Cozy" textAlignment="CENTER" textFill="#1e567d">
+         <font>
+            <Font name="UD Digi Kyokasho NK Bold" size="12.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="269.0" fitWidth="269.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../Cozify%20Logo%20with%20Cozy%20House%20Silhouette.png" />
+         </image>
+      </ImageView>
+      <StackPane layoutX="258.0" layoutY="26.0" prefHeight="334.0" prefWidth="307.0" style="-fx-background-color: #FFFF; -fx-border-color: #D0D7DF; -fx-background-radius: 20; -fx-border-radius: 20;">
+         <children>
+            <Pane fx:id="RegisterPane" prefHeight="330.0" prefWidth="282.0" style="-fx-background-color: #FFFF; -fx-border-color: #D0D7DF; -fx-border-radius: 20; -fx-background-radius: 20;">
+               <children>
+                  <TextField fx:id="usernameReg" layoutX="66.0" layoutY="105.0" promptText="Username" />
+                  <PasswordField fx:id="passwordReg" layoutX="66.0" layoutY="143.0" promptText="Password" />
+                  <Button fx:id="registerButton" layoutX="64.0" layoutY="182.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="151.0" text="Register" />
+                  <Label alignment="CENTER" layoutX="14.0" layoutY="26.0" prefHeight="50.0" prefWidth="258.0" text="Register" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                  </Label>
+                  <ToggleButton fx:id="toggleLogin" layoutX="98.0" layoutY="274.0" mnemonicParsing="false" onAction="#showLogin" prefHeight="20.0" prefWidth="80.0" style="-fx-background-color: #00263A;" text="Login" textFill="WHITE">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="authGroup" />
+                     </toggleGroup>
+                  </ToggleButton>
+                  <Label alignment="CENTER" layoutX="8.0" layoutY="229.0" prefHeight="50.0" prefWidth="258.0" text="Sudah punya akun? " textAlignment="CENTER" />
+               </children>
+            </Pane>
+            <Pane fx:id="loginPane" prefHeight="330.0" prefWidth="282.0" style="-fx-background-color: #FFFF; -fx-border-color: #D0D7DF; -fx-border-radius: 20; -fx-background-radius: 20;">
+               <children>
+                  <TextField fx:id="usernameLogin" layoutX="80.0" layoutY="103.0" promptText="Username" />
+                  <PasswordField fx:id="passwordLogin" layoutX="80.0" layoutY="142.0" promptText="Password" />
+                  <Button fx:id="loginButton" layoutX="80.0" layoutY="180.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="151.0" text="Log in" />
+                  <Label alignment="CENTER" layoutX="-2.0" layoutY="32.0" prefHeight="50.0" prefWidth="308.0" text="Log in" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                  </Label>
+                  <ToggleButton fx:id="toggleRegister" layoutX="112.0" layoutY="278.0" mnemonicParsing="false" onAction="#showRegister" prefHeight="20.0" prefWidth="80.0" style="-fx-background-color: #00263A;" text="Register" textFill="WHITE" />
+                  <Label alignment="CENTER" layoutY="233.0" prefHeight="50.0" prefWidth="305.0" text="Belum punya akun?" textAlignment="CENTER" />
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
