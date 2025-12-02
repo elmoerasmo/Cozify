@@ -74,7 +74,7 @@ public class HomepageController implements Initializable {
 
         // Geser Login ke kiri
         TranslateTransition tl = new TranslateTransition(DURATION, loginPane);
-        tl.setToX(-loginPane.getWidth());
+        tl.setToX(loginPane.getWidth()+ 800);
 
         // Geser Register ke posisi 0 (muncul)
         TranslateTransition tr = new TranslateTransition(DURATION, RegisterPane);
