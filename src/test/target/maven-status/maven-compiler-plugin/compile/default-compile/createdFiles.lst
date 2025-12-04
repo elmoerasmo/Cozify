@@ -1,0 +1,7 @@
+Controller\HomepageController.class
+Model\User.class
+com\mycompany\cozify\Cozify.class
+Model.class
+DAO\BaseDAO.class
+Main\Main.class
+DAO\UserDAO.class
