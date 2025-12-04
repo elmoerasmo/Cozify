@@ -1,90 +1,63 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
 
-import static DAO.BaseDAO.closeCon;
-import static DAO.BaseDAO.getCon;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.UUID;
 import Model.User;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.util.UUID;
 
-
-
-/**
- *
- * @author LENOVO
- */
 public class UserDAO {
-    
-     private static PreparedStatement st;
-    private static Connection con;
+    private Connection con;
 
-    public static User validate(String name, String passwd) {
-        User u = null;
-        try {
-            con = getCon();
-            String query = "select idUser from users where username = ? and password = ?";
-            st = con.prepareStatement(query);
-            
-            st.setString(1, name);
-            st.setString(2, passwd);
-            
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                u = new User(UUID.fromString(rs.getString("idUser")), name, passwd);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeCon(con);
-        }
-        return u;
+    public UserDAO() {
+        this.con = BaseDAO.getCon(); // pastikan BaseDAO.getCon() valid
     }
 
-    public static User searchByUid(String uid) {
-        User u = null;
+    public boolean registerUser(User user) {
+        String sql = "INSERT INTO users (idUser, username, email, password, kontak) VALUES (?, ?, ?, ?, ?)";
         try {
-            con = getCon();
-            String query = "select * from users where idUser = ?";
-
-            st = con.prepareStatement(query);
-            st.setString(1, uid);
-            
-            ResultSet rsUser = st.executeQuery();
-            u = new User(UUID.fromString(rsUser.getString("idUser")),
-                    rsUser.getString("username"), rsUser.getString("password"));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            closeCon(con);
-        }
-        return u;
-    }
-
-    public static void registerUser(User u) {
-        try {
-            con = getCon();
-            String query = "insert into users"
-                    + " values (?,?,?) ";
-            st = con.prepareStatement(query);
-            
-            st.setString(1, u.getUid().toString());
-            st.setString(2, u.getUname());
-            st.setString(3, u.getPass());
-            
-            st.executeUpdate();
+            PreparedStatement ps = con.prepareStatement(sql);
+            String id = UUID.randomUUID().toString();
+            ps.setString(1, id);
+            ps.setString(2, user.getUsername());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
+            ps.setNull(5, java.sql.Types.VARCHAR);
+            ps.executeUpdate();
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            closeCon(con);
+            return false;   
         }
-
+    }
+    
+    public User loginUserByUsernameOrEmail(String input, String password) { 
+        String sql = "SELECT * FROM users WHERE (username=? OR email=?) AND password=?"; 
+        try (PreparedStatement stmt = con.prepareStatement(sql)) { 
+            stmt.setString(1, input);
+            stmt.setString(2, input); 
+            stmt.setString(3, password);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) { 
+                return new User(rs.getString("username"), rs.getString("email"), rs.getString("password")); 
+            } 
+        } catch (Exception e) { 
+            e.printStackTrace(); 
+        } return null; } // Opsional: login hanya pakai username (legacy) 
+    
+    public User loginUser(String username, String password) { 
+        String sql = "SELECT * FROM users WHERE username=? AND password=?"; 
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, username); 
+            stmt.setString(2, password); 
+            ResultSet rs = stmt.executeQuery(); 
+            if (rs.next()) { 
+                return new User(rs.getString("username"), 
+                        rs.getString("email"), rs.getString("password")); 
+            } 
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        } return null; 
     }
     
 }

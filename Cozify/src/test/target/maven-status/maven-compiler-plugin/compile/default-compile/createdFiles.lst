@@ -1,6 +1,6 @@
 Controller\HomepageController.class
 Model\User.class
-Controller\DashboardController.class
+com\mycompany\cozify\Cozify.class
 Model.class
 DAO\BaseDAO.class
 Main\Main.class

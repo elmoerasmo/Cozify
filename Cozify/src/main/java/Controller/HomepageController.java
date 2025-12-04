@@ -1,56 +1,60 @@
 package Controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.animation.TranslateTransition;
+import DAO.UserDAO;
+import Model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.File;
+import java.io.IOException;
 
-public class HomepageController implements Initializable {
 
-    @FXML
-    private Pane RegisterPane;
-    @FXML
-    private TextField usernameReg;
-    @FXML
-    private PasswordField passwordReg;
-    @FXML
-    private Pane loginPane;
-    @FXML
-    private TextField usernameLogin;
-    @FXML
-    private PasswordField passwordLogin;
-    @FXML
-    private ToggleButton toggleLogin;
-    @FXML
-    private ToggleButton toggleRegister;
+public class HomepageController {
+
+    @FXML private Pane RegisterPane;
+    @FXML private Pane loginPane;
+
+    @FXML private TextField usernameReg;
+    @FXML private TextField emailReg;
+    @FXML private PasswordField passwordReg;
+    @FXML private Label infoLabelLog;    
+    @FXML private Label infoLabelReg;
+
+    
+    @FXML private TextField usernameLogin;
+    @FXML private TextField emailLogin;
+    @FXML private PasswordField passwordLogin;
+
+    @FXML private ToggleButton toggleLogin;
+    @FXML private ToggleButton toggleRegister;
+    
+    @FXML private Button registerButton;    
+    @FXML private Button loginButton;
+
 
     private final Duration DURATION = Duration.millis(350);
+    private UserDAO userDAO = new UserDAO();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-        // Set posisi awal RegisterPane supaya di luar layar (kanan)
-        loginPane.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                double width = newScene.getWidth();
-                RegisterPane.setTranslateX(width);   // Registrasi off-screen
-            }
-        });
-
-        // Set Toggle default (Login aktif)
-        toggleLogin.setSelected(true);
+    @FXML
+    private void initialize() {
+        // Set posisi awal RegisterPane off-screen
+        RegisterPane.setTranslateX(600);
         toggleLogin.setStyle("-fx-background-color: #0094D9; -fx-text-fill: white;");
         toggleRegister.setStyle("-fx-background-color: transparent; -fx-text-fill: #0094D9;");
     }
 
-    @FXML
+     @FXML
     private void showLogin(ActionEvent event) {
 
         // Geser Login ke posisi 0 (muncul)
@@ -68,7 +72,6 @@ public class HomepageController implements Initializable {
         toggleLogin.setStyle("-fx-background-color: #0094D9; -fx-text-fill: white;");
         toggleRegister.setStyle("-fx-background-color: transparent; -fx-text-fill: #0094D9;");
     }
-
     @FXML
     private void showRegister(ActionEvent event) {
 
@@ -87,4 +90,74 @@ public class HomepageController implements Initializable {
         toggleLogin.setStyle("-fx-background-color: transparent; -fx-text-fill: #0094D9;");
         toggleRegister.setStyle("-fx-background-color: #0094D9; -fx-text-fill: white;");
     }
+
+    @FXML
+    private void handleRegister(ActionEvent event) {
+        String username = usernameReg.getText();
+        String email = emailReg.getText();
+        String password = passwordReg.getText();
+
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            infoLabelReg.setText("Harap isi semua field.");
+            return;
+        }
+
+        User newUser = new User(username, email, password);
+        boolean success = userDAO.registerUser(newUser);
+
+        if (success) {
+            infoLabelReg.setText("Registrasi berhasil!");
+            usernameReg.clear();
+            emailReg.clear();
+            passwordReg.clear();
+
+            // buka Dashboard
+            try {
+                File fxmlFile = new File("src/main/java/View/Dashboard.fxml"); 
+                FXMLLoader loader = new FXMLLoader(fxmlFile.toURI().toURL()); 
+                Parent dashboardRoot = loader.load(); 
+                Stage stage = (Stage) registerButton.getScene().getWindow(); 
+                Scene scene = new Scene(dashboardRoot); stage.setScene(scene); stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                infoLabelReg.setText("Gagal membuka dashboard.");
+            }
+        } else {
+            infoLabelReg.setText("Registrasi gagal. Coba lagi.");
+        }
+    }
+    @FXML
+    private void handleLogin(ActionEvent event) {       
+    String username = usernameLogin.getText();
+    String password = passwordLogin.getText();
+
+    if (username.isEmpty() || password.isEmpty()) {
+        infoLabelLog.setText("Harap isi semua field.");
+        return;
+    }
+
+    User user = userDAO.loginUser(username, password); // loginUser mengembalikan User atau null
+
+    if (user != null) {
+        try {
+            // Load Dashboard.fxml langsung dari file system
+            File fxmlFile = new File("src/main/java/View/Dashboard.fxml");
+            FXMLLoader loader = new FXMLLoader(fxmlFile.toURI().toURL());
+            Parent dashboardRoot = loader.load();
+
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            Scene scene = new Scene(dashboardRoot);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            infoLabelLog.setText("Gagal membuka dashboard.");
+        }
+    } else {
+        infoLabelLog.setText("Username atau password salah.");
+    }
+
+    }
+
 }

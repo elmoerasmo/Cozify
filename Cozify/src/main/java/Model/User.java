@@ -1,58 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
 import java.util.UUID;
 
-/**
- *
- * @author LENOVO
- */
 public class User {
-    
-    private UUID idUser ;
+    private UUID idUser;
     private String username;
+    private String email;
     private String password;
 
-    public User(String username, String password) {
-        this.setPass(password);
-        this.setUname(username);
-        UUID uuid = UUID.randomUUID();
-        this.setUid(idUser);
-    }
-    
-    public User(UUID idUser, String username, String password) {
-        this.setPass(password);
-        this.setUname(username);
-        this.setUid(idUser);
+    // Constructor otomatis generate UUID
+    public User(String username, String email, String password) {
+        this.idUser = UUID.randomUUID(); // generate UUID baru
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
-    
-    public UUID getUid() {
+    // Getter dan Setter
+    public UUID getIdUser() {
         return idUser;
     }
 
-    public void setUid(UUID idUser) {
+    public void setIdUser(UUID idUser) {
         this.idUser = idUser;
     }
 
-    public String getUname() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUname(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPass() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
         return password;
     }
 
-    public void setPass(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
-     
-    
 }

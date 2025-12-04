@@ -13,7 +13,7 @@ import java.sql.DriverManager;
  */
 public class BaseDAO {
 
-    private static String DB_NAME = "kos_db";
+    private static String DB_NAME = "cozify";
     private static String DB_HOST = "localhost";
     private static String DB_USER = "root";
     private static String DB_PASS = "";

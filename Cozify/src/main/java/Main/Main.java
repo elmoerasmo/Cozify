@@ -14,9 +14,10 @@ public class Main extends Application {
 public void start(Stage stage) throws Exception {
 
     // Load FXML langsung dari file system
-    File fxmlFile = new File("src/main/java/view/Homepage.fxml");
+    File fxmlFile = new File("src/main/java/View/Homepage.fxml");
     URL url = fxmlFile.toURI().toURL();
-    Parent root = FXMLLoader.load(url);
+    FXMLLoader loader = new FXMLLoader(url);
+    Parent root = loader.load();
 
     Scene scene = new Scene(root);
     stage.setTitle("Cozify");
