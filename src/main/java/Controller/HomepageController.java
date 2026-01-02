@@ -2,162 +2,155 @@ package Controller;
 
 import DAO.UserDAO;
 import Model.User;
-import javafx.event.ActionEvent;
+import Model.Session;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.animation.TranslateTransition;
-import javafx.util.Duration;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Button;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.io.File;
-import java.io.IOException;
 
+import java.io.IOException;
 
 public class HomepageController {
 
-    @FXML private Pane RegisterPane;
     @FXML private Pane loginPane;
+    @FXML private Pane RegisterPane;
 
-    @FXML private TextField usernameReg;
-    @FXML private TextField emailReg;
-    @FXML private PasswordField passwordReg;
-    @FXML private Label infoLabelLog;    
-    @FXML private Label infoLabelReg;
-
-    
     @FXML private TextField usernameLogin;
-    @FXML private TextField emailLogin;
     @FXML private PasswordField passwordLogin;
+    @FXML private Label infoLabelLog;
+
+    @FXML private TextField emailReg;
+    @FXML private TextField usernameReg;
+    @FXML private PasswordField passwordReg;
+    @FXML private Label infoLabelReg;
 
     @FXML private ToggleButton toggleLogin;
     @FXML private ToggleButton toggleRegister;
-    
-    @FXML private Button registerButton;    
-    @FXML private Button loginButton;
 
-
-    private final Duration DURATION = Duration.millis(350);
     private UserDAO userDAO = new UserDAO();
 
+    // ================= Toggle Login/Register =================
     @FXML
-    private void initialize() {
-        // Set posisi awal RegisterPane off-screen
-        RegisterPane.setTranslateX(600);
-        toggleLogin.setStyle("-fx-background-color: #0094D9; -fx-text-fill: white;");
-        toggleRegister.setStyle("-fx-background-color: transparent; -fx-text-fill: #0094D9;");
-    }
-
-     @FXML
-    private void showLogin(ActionEvent event) {
-
-        // Geser Login ke posisi 0 (muncul)
-        TranslateTransition tl = new TranslateTransition(DURATION, loginPane);
-        tl.setToX(0);
-
-        // Geser Register ke kanan (hilang)
-        TranslateTransition tr = new TranslateTransition(DURATION, RegisterPane);
-        tr.setToX(RegisterPane.getScene().getWidth());
-
-        tl.play();
-        tr.play();
-
-        // Style toggle
-        toggleLogin.setStyle("-fx-background-color: #0094D9; -fx-text-fill: white;");
-        toggleRegister.setStyle("-fx-background-color: transparent; -fx-text-fill: #0094D9;");
-    }
-    @FXML
-    private void showRegister(ActionEvent event) {
-
-        // Geser Login ke kiri
-        TranslateTransition tl = new TranslateTransition(DURATION, loginPane);
-        tl.setToX(loginPane.getWidth()+ 800);
-
-        // Geser Register ke posisi 0 (muncul)
-        TranslateTransition tr = new TranslateTransition(DURATION, RegisterPane);
-        tr.setToX(0);
-
-        tl.play();
-        tr.play();
-
-        // Style toggle
-        toggleLogin.setStyle("-fx-background-color: transparent; -fx-text-fill: #0094D9;");
-        toggleRegister.setStyle("-fx-background-color: #0094D9; -fx-text-fill: white;");
+    private void showLogin() {
+        loginPane.setVisible(true);
+        RegisterPane.setVisible(false);
+        infoLabelLog.setText("");
+        infoLabelReg.setText("");
     }
 
     @FXML
-    private void handleRegister(ActionEvent event) {
-        String username = usernameReg.getText();
-        String email = emailReg.getText();
-        String password = passwordReg.getText();
+    private void showRegister() {
+        loginPane.setVisible(false);
+        RegisterPane.setVisible(true);
+        infoLabelLog.setText("");
+        infoLabelReg.setText("");
+    }
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            infoLabelReg.setText("Harap isi semua field.");
+    // ================= Login =================
+    @FXML
+    private void handleLogin() {
+        String input = usernameLogin.getText().trim();
+        String password = passwordLogin.getText().trim();
+
+        if (input.isEmpty() || password.isEmpty()) {
+            infoLabelLog.setText("Username/email dan password harus diisi!");
             return;
         }
 
-        User newUser = new User(username, email, password);
-        boolean success = userDAO.registerUser(newUser);
+        User user = userDAO.loginUser(input, password);
+        if (user == null) {
+            infoLabelLog.setText("Username/email atau password salah!");
+            return;
+        }
+        
+        Session.setUser(user);
+        openDashboard(user);
+    }
 
-        if (success) {
-            infoLabelReg.setText("Registrasi berhasil!");
-            usernameReg.clear();
-            emailReg.clear();
-            passwordReg.clear();
+    // ================= Register =================
+    @FXML
+    private void handleRegister() {
+        String email = emailReg.getText().trim();
+        String username = usernameReg.getText().trim();
+        String password = passwordReg.getText().trim();
 
-            // buka Dashboard
-            try {
-                File fxmlFile = new File("src/main/java/View/Dashboard.fxml"); 
-                FXMLLoader loader = new FXMLLoader(fxmlFile.toURI().toURL()); 
-                Parent dashboardRoot = loader.load(); 
-                Stage stage = (Stage) registerButton.getScene().getWindow(); 
-                Scene scene = new Scene(dashboardRoot); stage.setScene(scene); stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                infoLabelReg.setText("Gagal membuka dashboard.");
-            }
+        if (email.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            infoLabelReg.setText("Semua field harus diisi!");
+            return;
+        }
+
+        if (userDAO.isUsernameExist(username)) {
+            infoLabelReg.setText("Username sudah digunakan!");
+            return;
+        }
+
+        if (userDAO.isEmailExist(email)) {
+            infoLabelReg.setText("Email sudah digunakan!");
+            return;
+        }
+
+        User newUser = new User();
+        newUser.setNama(username);
+        newUser.setEmail(email);
+        newUser.setRole("CUSTOMER"); // default role
+        newUser.setStatus("PENDING"); // default status
+        newUser.setPassword(password);
+
+        if (userDAO.registerUser(newUser)) {
+            infoLabelReg.setText("Registrasi berhasil! Silakan login.");
+            showLogin();
         } else {
             infoLabelReg.setText("Registrasi gagal. Coba lagi.");
         }
     }
-    @FXML
-    private void handleLogin(ActionEvent event) {       
-    String username = usernameLogin.getText();
-    String password = passwordLogin.getText();
 
-    if (username.isEmpty() || password.isEmpty()) {
-        infoLabelLog.setText("Harap isi semua field.");
-        return;
-    }
-
-    User user = userDAO.loginUser(username, password); // loginUser mengembalikan User atau null
-
-    if (user != null) {
+    
+    private void openDashboard(User user) {
         try {
-            // Load Dashboard.fxml langsung dari file system
-            File fxmlFile = new File("src/main/java/View/Dashboard.fxml");
-            FXMLLoader loader = new FXMLLoader(fxmlFile.toURI().toURL());
-            Parent dashboardRoot = loader.load();
+            FXMLLoader loader;
+            Stage stage = new Stage();
 
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            Scene scene = new Scene(dashboardRoot);
-            stage.setScene(scene);
+            switch (user.getRole().toUpperCase()) {
+                case "ADMIN":
+                    loader = new FXMLLoader(getClass().getResource("/View/AdminDashboard.fxml"));
+                    break;
+                    
+                case "OWNER":
+                if ("Terverifikasi".equalsIgnoreCase(user.getStatus())) {
+                    // Owner sudah diverifikasi → OwnerDashboard
+                    loader = new FXMLLoader(getClass().getResource("/View/OwnerDashboard.fxml"));
+                } else {
+                    // Owner belum diverifikasi → Dashboard default (misal CustomerDashboard)
+                    loader = new FXMLLoader(getClass().getResource("/View/Dashboard.fxml"));
+                }
+                break;
+            
+                case "CUSTOMER":
+                    loader = new FXMLLoader(getClass().getResource("/View/Dashboard.fxml"));
+                    break;
+                default:
+                    infoLabelLog.setText("Role tidak dikenal!");
+                    return;
+            }
+
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle(user.getRole() + " Dashboard");
             stage.show();
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            infoLabelLog.setText("Gagal membuka dashboard.");
+            // Kirim data user ke controller dashboard jika implements ControllerWithUser
+            Object controller = loader.getController();
+            if (controller instanceof ControllerWithUser) {
+                ((ControllerWithUser) controller).setUser(user);
+            }
+
+            // Tutup window login
+            usernameLogin.getScene().getWindow().hide();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            infoLabelLog.setText("Error loading dashboard!");
         }
-    } else {
-        infoLabelLog.setText("Username atau password salah.");
     }
-
-    }
-
 }

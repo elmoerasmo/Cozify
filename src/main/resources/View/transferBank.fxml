@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TransferBankController">
+   <children>
+      <BorderPane prefHeight="350.0" prefWidth="500.0">
+         <top>
+            <Pane prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #D3E3EA;" BorderPane.alignment="CENTER">
+               <children>
+                  <Text layoutX="201.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transfer Bank">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+            </Pane>
+         </top>
+         <center>
+            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+               <children>
+                  <Text layoutX="122.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bank Galaxy">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="tfNomorRekening" fill="#4c7bff" layoutX="122.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="123345567012345">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="btKonfirmasiPembayaran" layoutX="160.0" layoutY="175.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="180.0" style="-fx-background-color: #4C7BFF; -fx-border-radius: 15; -fx-background-radius: 15;" text="Konfirmasi Pembayaran" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="372.0" layoutY="-53.0" prefHeight="107.0" prefWidth="108.0" style="-fx-background-radius: 50; -fx-border-radius: 50; -fx-background-color: #B0D4E3;" />
+                  <ImageView fitHeight="118.0" fitWidth="118.0" layoutX="367.0" layoutY="-59.0">
+                     <image>
+                        <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Credit Card.png" />
+                     </image>
+                  </ImageView>
+                  <Text layoutX="116.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Pembayaran">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="tFTransBank" layoutX="233.0" layoutY="126.0" prefHeight="8.0" prefWidth="151.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" />
+                  <Button fx:id="btSalinRek" layoutX="336.0" layoutY="81.0" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Salin" textFill="#4c7bff" />
+               </children>
+            </Pane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

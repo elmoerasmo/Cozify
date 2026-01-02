@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="CENTER"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.EditProfileController"
+      style="-fx-padding: 25;">
+
+    <Label text="Edit Profile"
+           style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <TextField fx:id="txtNama" promptText="Nama"/>
+    <TextField fx:id="txtEmail" promptText="Email"/>
+    <TextField fx:id="txtPhone" promptText="No Telepon"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Simpan" fx:id="btnSave" onAction="#handleSave"/>
+        <Button text="Batal" fx:id="btnCancel" onAction="#handleCancel"/>
+    </HBox>
+
+</VBox>
