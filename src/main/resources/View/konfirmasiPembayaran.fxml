@@ -45,7 +45,7 @@
                         <Font size="13.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="tfKodeReservasi" editable="false" layoutX="118.0" layoutY="27.0" prefHeight="27.0" prefWidth="452.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                  <TextField fx:id="tfIdReservasi" editable="false" layoutX="118.0" layoutY="27.0" prefHeight="27.0" prefWidth="452.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
                      <font>
                         <Font size="13.0" />
                      </font>

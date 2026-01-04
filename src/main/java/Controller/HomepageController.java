@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.UserDAO;
+import Model.PemilikKos;
 import Model.User;
 import Model.Session;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.scene.Parent;
 
 public class HomepageController {
 
@@ -31,7 +33,6 @@ public class HomepageController {
 
     private UserDAO userDAO = new UserDAO();
 
-    // ================= Toggle Login/Register =================
     @FXML
     private void showLogin() {
         loginPane.setVisible(true);
@@ -48,7 +49,6 @@ public class HomepageController {
         infoLabelReg.setText("");
     }
 
-    // ================= Login =================
     @FXML
     private void handleLogin() {
         String input = usernameLogin.getText().trim();
@@ -69,7 +69,6 @@ public class HomepageController {
         openDashboard(user);
     }
 
-    // ================= Register =================
     @FXML
     private void handleRegister() {
         String email = emailReg.getText().trim();
@@ -94,8 +93,8 @@ public class HomepageController {
         User newUser = new User();
         newUser.setNama(username);
         newUser.setEmail(email);
-        newUser.setRole("CUSTOMER"); // default role
-        newUser.setStatus("PENDING"); // default status
+        newUser.setRole("CUSTOMER"); 
+        newUser.setStatus("PENDING"); 
         newUser.setPassword(password);
 
         if (userDAO.registerUser(newUser)) {
@@ -109,44 +108,46 @@ public class HomepageController {
     
     private void openDashboard(User user) {
         try {
-            FXMLLoader loader;
-            Stage stage = new Stage();
+          FXMLLoader loader;
+            String role = user.getRole().toUpperCase();
 
-            switch (user.getRole().toUpperCase()) {
-                case "ADMIN":
-                    loader = new FXMLLoader(getClass().getResource("/View/AdminDashboard.fxml"));
-                    break;
-                    
-                case "OWNER":
+            switch (role) {
+            case "ADMIN":
+                loader = new FXMLLoader(getClass().getResource("/View/AdminDashboard.fxml"));
+                break;
+            case "OWNER":
                 if ("Terverifikasi".equalsIgnoreCase(user.getStatus())) {
-                    // Owner sudah diverifikasi → OwnerDashboard
                     loader = new FXMLLoader(getClass().getResource("/View/OwnerDashboard.fxml"));
                 } else {
-                    // Owner belum diverifikasi → Dashboard default (misal CustomerDashboard)
                     loader = new FXMLLoader(getClass().getResource("/View/Dashboard.fxml"));
                 }
                 break;
-            
-                case "CUSTOMER":
-                    loader = new FXMLLoader(getClass().getResource("/View/Dashboard.fxml"));
-                    break;
-                default:
-                    infoLabelLog.setText("Role tidak dikenal!");
-                    return;
-            }
-
-            stage.setScene(new Scene(loader.load()));
+            case "CUSTOMER":
+                loader = new FXMLLoader(getClass().getResource("/View/Dashboard.fxml"));
+                break;
+            default:
+                infoLabelLog.setText("Role tidak dikenal!");
+                return;
+        }
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
             stage.setTitle(user.getRole() + " Dashboard");
-            stage.show();
-
-            // Kirim data user ke controller dashboard jika implements ControllerWithUser
             Object controller = loader.getController();
+
+            if (controller instanceof DashboardController) {
+                ((DashboardController) controller).setStage(stage);
+            } else if (controller instanceof OwnerDashboardController) {
+                ((OwnerDashboardController) controller).setStage(stage); 
+            } else if (controller instanceof AdminDashboardController) {
+                ((AdminDashboardController) controller).setStage(stage); 
+            }
             if (controller instanceof ControllerWithUser) {
                 ((ControllerWithUser) controller).setUser(user);
             }
 
-            // Tutup window login
-            usernameLogin.getScene().getWindow().hide();
+            stage.show();
+            usernameLogin.getScene().getWindow().hide();;
 
         } catch (IOException e) {
             e.printStackTrace();

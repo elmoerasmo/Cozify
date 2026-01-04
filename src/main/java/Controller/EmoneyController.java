@@ -20,36 +20,45 @@ public class EmoneyController {
     private PaymentViewController paymentViewController;
     
     public void initialize() {
-        btSalinEmoney.setOnAction(e -> copyNomorEwallet());
-        btKonfirmasiPembayaran.setOnAction(e -> konfirmasiPembayaran());
+       btSalinEmoney.setOnAction(e -> {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(tfNomorEmoney.getText());
+            clipboard.setContent(content);
+            btSalinEmoney.setText("Tersalin!");
+        });
+
+        btKonfirmasiPembayaran.setOnAction(e -> {
+            Stage stage = (Stage) btKonfirmasiPembayaran.getScene().getWindow();
+            stage.close();
+        });
     }
     
-    public void setPaymentViewController(PaymentViewController controller) {
+    public void setData(double total, String nomorEwallet) {
+        this.tfTotalPembayaran.setText(String.format(RUPIAH_FORMAT, total));
+        this.tfNomorEmoney.setText(nomorEwallet);
+    }
+
+    public void setPaymentCode(String code) {
+        tfNomorEmoney.setText(code);
+    }
+    
+    public void setPaymentData(PaymentViewController controller, double total) {
         this.paymentViewController = controller;
-    }
-    
-    public void setTotalPembayaran(double total) {
         tfTotalPembayaran.setText(String.format(RUPIAH_FORMAT, total));
     }
     
     private void copyNomorEwallet() {
         String walletNumber = tfNomorEmoney.getText();
-        copyToClipboard(walletNumber);
-        System.out.println("Nomor e-wallet berhasil disalin: " + walletNumber);
-    }
-    
-    private void copyToClipboard(String text) {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
-        content.putString(text);
+        content.putString(walletNumber);
         clipboard.setContent(content);
+        btSalinEmoney.setText("Tersalin!");
     }
     
     private void konfirmasiPembayaran() {
         closeWindow();
-        if (paymentViewController != null) {
-            paymentViewController.showPembayaranBerhasil();
-        }
     }
     
     private void closeWindow() {

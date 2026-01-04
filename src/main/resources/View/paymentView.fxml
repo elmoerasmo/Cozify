@@ -2,319 +2,148 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<ScrollPane fitToWidth="true" prefHeight="1500.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PaymentViewController">
+<ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="900.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PaymentViewController">
    <content>
-      <AnchorPane id="AnchorPane" prefHeight="1250.0">
+      <AnchorPane style="-fx-background-color: #E0E7FF;">
          <children>
-            <BorderPane prefHeight="1250.0" style="-fx-background-color: #E0E7FF;">
+            <BorderPane fx:id="mainContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <top>
-                  <Pane prefHeight="182.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-border-radius: 20; -fx-background-radius: 20;" BorderPane.alignment="CENTER">
+                  <VBox BorderPane.alignment="CENTER">
                      <children>
-                        <ImageView fitHeight="250.0" fitWidth="250.0" layoutX="-35.0" layoutY="-34.0">
-                           <image>
-                              <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Cozify Logo with Cozy House Silhouette.png" />
-                           </image>
-                        </ImageView>
-                        <Text layoutX="184.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pembayaran Reservasi Kos">
-                           <font>
-                              <Font name="System Bold" size="40.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="tfIDReservasi" layoutX="1032.0" layoutY="119.0" prefHeight="50.0" prefWidth="200.0">
-                           <font>
-                              <Font size="14.0" />
-                           </font></TextField>
-                        <Text layoutX="1046.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kode Reservasi Kos" wrappingWidth="174.5">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
+                        <Pane prefHeight="150.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-background-radius: 20; -fx-border-radius: 20;">
+                           <children>
+                              <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="20.0" layoutY="15.0" preserveRatio="true">
+                                 <image><Image url="@/images/cozifylogo.png" /></image>
+                              </ImageView>
+                              <Text layoutX="160.0" layoutY="85.0" text="Pembayaran Reservasi Kos">
+                                 <font><Font name="System Bold" size="36.0" /></font>
+                              </Text>
+                              <VBox layoutX="1000.0" layoutY="45.0" spacing="5.0">
+                                 <children>
+                                    <Text text="Kode Reservasi Kos"><font><Font name="System Italic" size="14.0" /></font></Text>
+                                    <TextField fx:id="tfIDReservasi" editable="false" prefHeight="30.0" prefWidth="200.0" style="-fx-background-radius: 10;" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </Pane>
                      </children>
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
-                     </padding>
-                     <BorderPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </BorderPane.margin>
-                  </Pane>
+                     <padding><Insets bottom="10.0" left="20.0" right="20.0" top="20.0" /></padding>
+                  </VBox>
                </top>
+
                <center>
-                  <HBox prefHeight="500.0" BorderPane.alignment="CENTER">
+                  <HBox spacing="20.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox prefHeight="500.0" spacing="24.0">
+                        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Pane prefHeight="300.0" prefWidth="830.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-background-radius: 20; -fx-border-radius: 20;">
+                              <VBox spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20;">
                                  <children>
-                                    <Text layoutX="107.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Informasi Kos">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                    </Text>
-                                    <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="10.0" layoutY="-1.0">
-                                       <image>
-                                          <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\building.png" />
-                                       </image>
-                                    </ImageView>
-                                    <TextField fx:id="tfNamaKos" editable="false" layoutX="256.0" layoutY="93.0" prefHeight="36.0" prefWidth="500.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <ImageView fitHeight="50.0" fitWidth="54.0" layoutX="256.0" layoutY="143.0">
-                                       <image>
-                                          <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\location pin.png" />
-                                       </image>
-                                    </ImageView>
-                                    <TextField fx:id="tfAlamatKos" editable="false" layoutX="316.0" layoutY="149.0" prefHeight="38.0" prefWidth="441.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <HBox alignment="CENTER_LEFT" layoutX="283.0" layoutY="193.0" prefHeight="108.0" prefWidth="460.0" spacing="20.0" style="-fx-spacing: 100;">
+                                    <Text style="-fx-font-weight: bold;" text="Informasi Kos"><font><Font size="22.0" /></font></Text>
+                                    <HBox spacing="20.0" alignment="CENTER_LEFT">
                                        <children>
-                                          <Label fx:id="lbTipeKos" style="-fx-background-color: #E0E7FF; -fx-text-fill: #4338CA; -fx-padding: 5 12 5 12; -fx-background-radius: 100; -fx-font-size: 18;" text="Tipe:" />
-                                          <Label fx:id="lbNoKamar" style="-fx-background-color: #D1FAE5; -fx-text-fill: #065F46; -fx-padding: 5 12 5 12; -fx-background-radius: 100; -fx-font-size: 18;" text="Kamar No." />
-                                       </children>
-                                    </HBox>
-                                    <Pane fx:id="imgViewKos" layoutX="21.0" layoutY="83.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-background-radius: 20; -fx-border-radius: 20;">
-                                       <children>
-                                          <ImageView fitHeight="176.0" fitWidth="172.0" layoutX="14.0" layoutY="12.0" opacity="0.45">
-                                             <image>
-                                                <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Cozify Logo with Cozy House Silhouette.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </Pane>
-                                 </children>
-                              </Pane>
-                              <Pane prefHeight="300.0" prefWidth="830.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-background-radius: 20; -fx-border-radius: 20;">
-                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="5.0" layoutY="9.0">
-                                       <image>
-                                          <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\user.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Text layoutX="99.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Penyewa">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                    </Text>
-                                    <TextField fx:id="tfNamaPenyewa" editable="false" layoutX="51.0" layoutY="143.0" prefHeight="36.0" prefWidth="300.0" style="-fx-background-color: transparent; -fx-border-color: #e0e0e1;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <Text fill="#394040d6" layoutX="54.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nama Lengkap">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <TextField fx:id="tfEmail" editable="false" layoutX="52.0" layoutY="230.0" prefHeight="36.0" prefWidth="300.0" style="-fx-background-color: transparent; -fx-border-color: #e0e0e1;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <TextField fx:id="tfNoTelepon" editable="false" layoutX="459.0" layoutY="142.0" prefHeight="36.0" prefWidth="300.0" style="-fx-background-color: transparent; -fx-border-color: #e0e0e1;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <Text fill="#394040d6" layoutX="55.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <Text fill="#394040d6" layoutX="461.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="No. Telepon">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </Pane>
-                              <Pane prefHeight="300.0" prefWidth="830.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-background-radius: 20; -fx-border-radius: 20;">
-                                 <children>
-                                    <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="17.0" layoutY="5.0">
-                                       <image>
-                                          <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Credit Card.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Text layoutX="113.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Metode Pembayaran">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                    </Text>
-                                    <HBox alignment="CENTER" layoutX="95.0" layoutY="110.0" prefHeight="141.0" prefWidth="618.0" spacing="10.0">
-                                       <padding>
-                                          <Insets top="10.0" />
-                                       </padding>
-                                       <children>
-                                          <Button fx:id="btTfBank" mnemonicParsing="false" prefHeight="120.0" prefWidth="230.0" style="-fx-background-color: #EEF2FF; -fx-border-color: #4C7BFF; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;">
-                                             <graphic>
-                                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                                   <children>
-                                                      <ImageView fitHeight="81.0" fitWidth="89.0">
-                                                         <image>
-                                                            <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Credit Card.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                      <Text fill="#394040d6" strokeType="OUTSIDE" strokeWidth="0.0" text="Transfer Bank">
-                                                         <font>
-                                                            <Font size="18.0" />
-                                                         </font>
-                                                      </Text>
-                                                   </children>
-                                                </VBox>
-                                             </graphic>
-                                          </Button>
-                                          <Button fx:id="btEwallet" mnemonicParsing="false" prefHeight="120.0" prefWidth="230.0" style="-fx-background-color: #EEF2FF; -fx-border-color: #4C7BFF; -fx-border-width: 2; -fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand;">
-                                             <graphic>
-                                                <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                                   <children>
-                                                      <ImageView fitHeight="81.0" fitWidth="89.0">
-                                                         <image>
-                                                            <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\10.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                      <Text fill="#394040d6" strokeType="OUTSIDE" strokeWidth="0.0" text="E-Wallet">
-                                                         <font>
-                                                            <Font size="18.0" />
-                                                         </font>
-                                                      </Text>
-                                                   </children>
-                                                </VBox>
-                                             </graphic>
-                                          </Button>
-                                          <Button fx:id="btQris" mnemonicParsing="false" prefHeight="120.0" prefWidth="230.0" style="-fx-border-color: #4C7BFF; -fx-background-color: #EEF2FF; -fx-border-width: 2; -fx-background-radius: 8; -fx-border-radius: 8; -fx-cursor: hand;">
-                                             <graphic>
-                                                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                                                   <children>
-                                                      <ImageView fitHeight="80.0" fitWidth="80.0">
-                                                         <image>
-                                                            <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Untitled design (1).png" />
-                                                         </image>
-                                                      </ImageView>
-                                                      <Text fill="#394040d6" strokeType="OUTSIDE" strokeWidth="0.0" text="Qris">
-                                                         <font>
-                                                            <Font size="18.0" />
-                                                         </font>
-                                                      </Text>
-                                                   </children>
-                                                </VBox>
-                                             </graphic>
-                                          </Button>
+                                          <ImageView fitHeight="100.0" fitWidth="100.0" preserveRatio="true"><image><Image url="@/images/assets/building.png" /></image></ImageView>
+                                          <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                            <children>
+                                               <TextField fx:id="lblNamaKos" editable="false" style="-fx-background-color: transparent; -fx-font-weight: bold; -fx-font-size: 20;" text="Nama Kos" />
+                                               <TextField fx:id="tfAlamatKos" editable="false" style="-fx-background-color: transparent;" text="Alamat" />
+
+                                               <Label text="Pilih Nomor Kamar:" style="-fx-font-size: 12; -fx-text-fill: #666;" />
+                                               <ComboBox fx:id="cbPilihKamar" prefWidth="250.0" promptText="-- Pilih Kamar --" 
+                                                         style="-fx-background-radius: 10; -fx-padding: 5;" />
+
+                                               <HBox spacing="15.0">
+                                                  <children>
+                                                     <Label fx:id="lbTipeKos" style="-fx-background-color: #E0E7FF; -fx-text-fill: #4338CA; -fx-padding: 5 12; -fx-background-radius: 20;" text="Tipe" />
+                                                     </children>
+                                               </HBox>
+                                            </children>
+                                         </VBox>
                                        </children>
                                     </HBox>
                                  </children>
-                              </Pane>
+                              </VBox>
+
+                              <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 20;" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Text style="-fx-font-weight: bold;" text="Metode Pembayaran"><font><Font size="22.0" /></font></Text>
+                                    <HBox spacing="15.0" alignment="CENTER">
+                                       <children>
+                                          <Button fx:id="btTfBank" onAction="#handleSelectBank" prefHeight="120.0" prefWidth="220.0" text="Transfer Bank" style="-fx-cursor: hand; -fx-background-color: #EEF2FF; -fx-border-color: #4C7BFF; -fx-border-radius: 15;" HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="btEwallet" onAction="#handleSelectEmoney" prefHeight="120.0" prefWidth="220.0" text="E-Wallet" style="-fx-cursor: hand; -fx-background-color: #EEF2FF; -fx-border-color: #4C7BFF; -fx-border-radius: 15;" HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="btQris" onAction="#handleSelectQRIS" prefHeight="120.0" prefWidth="220.0" text="QRIS" style="-fx-cursor: hand; -fx-background-color: #EEF2FF; -fx-border-color: #4C7BFF; -fx-border-radius: 15;" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
-                           <padding>
-                              <Insets right="24.0" />
-                           </padding>
                         </VBox>
-                        <VBox prefHeight="500.0" prefWidth="450.0" spacing="20.0">
+
+                        <VBox prefWidth="450.0" spacing="20.0">
                            <children>
-                              <Pane prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-background-radius: 20; -fx-border-radius: 20;">
+                              <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 25;">
                                  <children>
-                                    <Label fx:id="lbProgress1" alignment="CENTER" layoutX="57.0" layoutY="71.0" opacity="0.25" prefHeight="49.0" prefWidth="54.0" style="-fx-background-color: #E0E7FF; -fx-text-fill: #4338CA; -fx-padding: 5 12 5 12; -fx-background-radius: 100; -fx-font-size: 18;" text="1">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="lbProgress2" alignment="CENTER" layoutX="57.0" layoutY="176.0" opacity="0.25" prefHeight="49.0" prefWidth="54.0" style="-fx-background-color: #E0E7FF; -fx-text-fill: #4338CA; -fx-padding: 5 12 5 12; -fx-background-radius: 100; -fx-font-size: 18;" text="2">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="lbProgress3" alignment="CENTER" layoutX="57.0" layoutY="281.0" opacity="0.25" prefHeight="49.0" prefWidth="54.0" style="-fx-background-color: #E0E7FF; -fx-text-fill: #4338CA; -fx-padding: 5 12 5 12; -fx-background-radius: 100; -fx-font-size: 18;" text="3">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Text fill="#4338cad6" layoutX="133.0" layoutY="102.0" opacity="0.81" strokeType="OUTSIDE" strokeWidth="0.0" text="Detail Transaksi">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <Text fill="#4338cad6" layoutX="133.0" layoutY="207.0" opacity="0.8" strokeType="OUTSIDE" strokeWidth="0.0" text="Konfirmasi Pembayaran">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <Text fill="#4338cad6" layoutX="133.0" layoutY="312.0" opacity="0.8" strokeType="OUTSIDE" strokeWidth="0.0" text="Bukti Pembayaran">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                 </children></Pane>
-                              <Pane prefHeight="530.0" prefWidth="450.0" style="-fx-background-color: #ffffff; -fx-border-color: #d0d7df; -fx-background-radius: 20; -fx-border-radius: 20;">
-                                 <children>
-                                    <Text layoutX="35.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ringkasan Pembayaran">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                    </Text>
-                                    <ImageView fitHeight="54.0" fitWidth="52.0" layoutX="22.0" layoutY="71.0">
-                                       <image>
-                                          <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Calendar.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Text fill="#394040d6" layoutX="69.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Periode Sewa">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                    <TextField fx:id="tfPeriodeSewa" editable="false" layoutX="69.0" layoutY="118.0" prefHeight="36.0" prefWidth="304.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <Text fill="#394040d6" layoutX="69.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Durasi:">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Text>
-                                    <TextField fx:id="tfDurasiSewa" editable="false" layoutX="119.0" layoutY="179.0" prefHeight="29.0" prefWidth="140.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <Text fill="#394040d6" layoutX="69.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Harga Sewa/Bulan">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Text>
-                                    <TextField fx:id="tfHargaSewa" editable="false" layoutX="69.0" layoutY="268.0" prefHeight="36.0" prefWidth="306.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <Text fill="#394040d6" layoutX="70.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Pembayaran">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Text>
-                                    <TextField fx:id="tfTotalPembayaran" editable="false" layoutX="74.0" layoutY="363.0" prefHeight="45.0" prefWidth="306.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></TextField>
-                                    <Button fx:id="btKonfirmasiPembayaran" layoutX="125.0" layoutY="438.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #4C7BFF; -fx-border-radius: 15; -fx-background-radius: 15;" text="Lanjutkan Pembayaran" textFill="WHITE">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Button>
+                                    <Text style="-fx-font-weight: bold;" text="Ringkasan Sewa"><font><Font size="22.0" /></font></Text>
+                                    <Separator />
+                                    <Label text="Pilih Tanggal Masuk" />
+                                    <DatePicker fx:id="dpTanggalMasuk" maxWidth="Infinity" />
+                                    <Label text="Durasi Sewa (Bulan)" />
+                                    <TextField fx:id="tfDurasiSewa" prefHeight="40.0" style="-fx-background-radius: 10;" />
+                                    <VBox spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 10;">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT">
+                                             <Text text="Harga/Bulan" />
+                                             <Pane HBox.hgrow="ALWAYS" />
+                                             <TextField fx:id="tfHargaPerBulan"  alignment="CENTER_RIGHT" editable="false" style="-fx-background-color: transparent;" />
+                                          </HBox>
+                                          <Separator />
+                                          <HBox alignment="CENTER_LEFT">
+                                             <Text style="-fx-font-weight: bold;" text="Total Bayar" />
+                                             <Pane HBox.hgrow="ALWAYS" />
+                                             <TextField fx:id="tfTotalPembayaran" alignment="CENTER_RIGHT" editable="false" style="-fx-background-color: transparent; -fx-text-fill: #4C7BFF; -fx-font-weight: bold;" />
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                    <Button fx:id="btKonfirmasiPembayaran" onAction="#handleKonfirmasiBayar" maxWidth="Infinity" prefHeight="55.0" style="-fx-background-color: #4C7BFF; -fx-text-fill: white; -fx-background-radius: 15; -fx-font-weight: bold; -fx-cursor: hand;" text="BAYAR SEKARANG" />
                                  </children>
-                              </Pane>
+                              </VBox>
+
+                              <VBox spacing="15.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-padding: 25;">
+                                 <children>
+                                    <HBox spacing="15.0" alignment="CENTER_LEFT">
+                                       <Label alignment="CENTER" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #4C7BFF; -fx-text-fill: white; -fx-background-radius: 100;" text="1" />
+                                       <Text fill="#4338cad6" text="Detail Transaksi"><font><Font size="16.0" /></font></Text>
+                                    </HBox>
+                                    <HBox spacing="15.0" alignment="CENTER_LEFT" opacity="0.5">
+                                       <Label alignment="CENTER" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #E0E7FF; -fx-text-fill: #4338CA; -fx-background-radius: 100;" text="2" />
+                                       <Text fill="#4338cad6" text="Konfirmasi Pembayaran"><font><Font size="16.0" /></font></Text>
+                                    </HBox>
+                                    <HBox spacing="15.0" alignment="CENTER_LEFT" opacity="0.5">
+                                       <Label alignment="CENTER" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #E0E7FF; -fx-text-fill: #4338CA; -fx-background-radius: 100;" text="3" />
+                                       <Text fill="#4338cad6" text="Bukti Pembayaran"><font><Font size="16.0" /></font></Text>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
                         </VBox>
                      </children>
-                     <padding>
-                        <Insets left="20.0" right="20.0" top="20.0" />
-                     </padding>
+                     <padding><Insets bottom="40.0" left="20.0" right="20.0" top="10.0" /></padding>
                   </HBox>
                </center>
             </BorderPane>

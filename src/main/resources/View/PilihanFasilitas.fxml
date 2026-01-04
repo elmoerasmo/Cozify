@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="500.0" spacing="0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0, 0, 10);" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PilihanFasilitasController">
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefWidth="500.0" spacing="0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0, 0, 10);" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="Controller.PilihanFasilitasController">
    <children>
       <HBox alignment="CENTER" prefHeight="60.0" style="-fx-padding: 0 20;">
          <children>
@@ -38,16 +38,16 @@
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <children>
-                              <CheckBox text="Kamar Mandi Dalam" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                              <CheckBox text="Kloset Duduk" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                              <CheckBox text="Air panas" GridPane.rowIndex="2" />
-                              <CheckBox text="Kasur" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <CheckBox text="Lemari / Storage" GridPane.rowIndex="4" />
-                              <CheckBox text="TV" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <CheckBox text=" Meja Belajar" GridPane.rowIndex="3" />
-                              <CheckBox text="AC" GridPane.rowIndex="5" />
-                              <CheckBox mnemonicParsing="false" text="Kamar Mandi Luar" GridPane.rowIndex="1" />
-                              <CheckBox mnemonicParsing="false" text="Kloset Jongkok" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <CheckBox fx:id="cbKMandiDalam" text="Kamar Mandi Dalam" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <CheckBox fx:id="cbKlosetDuduk" text="Kloset Duduk" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                              <CheckBox fx:id="cbAirPanas" text="Air panas" GridPane.rowIndex="2" />
+                              <CheckBox fx:id="cbKasur" text="Kasur" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <CheckBox fx:id="cbLemari" text="Lemari / Storage" GridPane.rowIndex="4" />
+                              <CheckBox fx:id="cbTV" text="TV" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <CheckBox fx:id="cbMejaBelajar" text=" Meja Belajar" GridPane.rowIndex="3" />
+                              <CheckBox fx:id="cbAC" text="AC" GridPane.rowIndex="5" />
+                              <CheckBox fx:id="cbKMandiLuar" mnemonicParsing="false" text="Kamar Mandi Luar" GridPane.rowIndex="1" />
+                              <CheckBox fx:id="cbKlosetJongkok" mnemonicParsing="false" text="Kloset Jongkok" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                           </children>
                            <rowConstraints>
                               <RowConstraints />
@@ -72,7 +72,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <CheckBox mnemonicParsing="false" text="Wi-Fi" />
+                        <CheckBox fx:id="cbWifi" mnemonicParsing="false" text="Wi-Fi" />
                         <CheckBox mnemonicParsing="false" text="CCTV 24  jam" GridPane.rowIndex="1" />
                         <CheckBox mnemonicParsing="false" text="Air Bersih" GridPane.columnIndex="1" />
                      </children>
@@ -87,7 +87,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="15.0" style="-fx-padding: 0 25;">
          <children>
             <Button prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-cursor: hand;" text="Hapus" />
-            <Button prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #47cbff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Simpan" />
+            <Button onAction="#handleTerapkan" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #47cbff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Terapkan" />
          </children>
       </HBox>
    </children>

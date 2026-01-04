@@ -12,10 +12,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 
 public class FavoritViewController implements Initializable {
 
-    @FXML private VBox vBoxFavorit;
+    @FXML private VBox vBoxFavorit;   
+    @FXML private Button btnBack;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -29,7 +33,7 @@ public class FavoritViewController implements Initializable {
         for (Kos k : DashboardController.allKosList) {
             if (k.isFavorite()) {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/KosCard.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/KosCard.fxml"));
                     Parent card = loader.load();
                     KosCardController controller = loader.getController();
                     controller.setData(k); // Session akan otomatis tahu user
@@ -39,5 +43,11 @@ public class FavoritViewController implements Initializable {
                 }
             }
         }
+    }
+    
+    @FXML
+    private void handleBackToHome() {
+        Stage stage = (Stage) btnBack.getScene().getWindow(); 
+        stage.close();
     }
 }

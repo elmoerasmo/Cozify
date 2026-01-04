@@ -1,169 +1,158 @@
 package Controller;
 
+import DAO.KosDAO;
+import DAO.KamarDAO; 
+import Model.Kos;
+import Model.Kamar; 
+import Helper.PembayaranHelper;
+import Model.Pembayaran;
+import Model.Session;
+import Model.User;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import Model.Kos;
-import Model.Pembayaran;
-import Model.Session;
-import Model.User;
-import DAO.PembayaranDAO;
-
+import javafx.util.StringConverter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class PaymentViewController {
-
-    @FXML private TextField tfNamaKos;
-    @FXML private TextField tfAlamatKos;
+    @FXML private BorderPane mainContainer; 
+    @FXML private TextField lblNamaKos, tfAlamatKos, tfHargaPerBulan, tfDurasiSewa, tfTotalPembayaran, tfIDReservasi;
     @FXML private Label lbTipeKos;
-    @FXML private Label lbNoKamar;
-    @FXML private TextField tfNamaPenyewa;
-    @FXML private TextField tfEmail;
-    @FXML private TextField tfNoTelepon;
-    @FXML private Button btTfBank;
-    @FXML private Button btEwallet;
-    @FXML private Button btQris;
-    @FXML private TextField tfPeriodeSewa;
-    @FXML private TextField tfDurasiSewa;
-    @FXML private TextField tfHargaSewa;
-    @FXML private TextField tfTotalPembayaran;
-    @FXML private Button btKonfirmasiPembayaran;
+    @FXML private ComboBox<Kamar> cbPilihKamar; 
+    
+    private Pembayaran pembayaranSelesai;
+    private Kos selectedKos;
+    private String selectedMethod = "Belum Dipilih";
 
-    private Pembayaran pembayaran;
-    private String pembayaranDipilih = "";
-    private final String tombolDipilih = "-fx-background-color: #4C7BFF; -fx-border-color: #4C7BFF; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;";
-    private final String tombol = "-fx-background-color: #EEF2FF; -fx-border-color: #4C7BFF; -fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;";
-
-    public void initialize() {
-        btTfBank.setOnAction(e -> selectPaymentMethod("Transfer Bank"));
-        btEwallet.setOnAction(e -> selectPaymentMethod("E-Wallet"));
-        btQris.setOnAction(e -> selectPaymentMethod("QRIS"));
-        btKonfirmasiPembayaran.setOnAction(e -> handleKonfirmasiPembayaran());
-    }
-
-    /**
-     * Dipanggil dari dashboard saat user klik "Bayar"
-     */
-    public void setKosAndUser(Kos kos, User user) {
-        this.pembayaran = new Pembayaran();
-        pembayaran.setKos(kos);
-        pembayaran.setUser(user);
-
-        pembayaran.setTanggalMasuk(LocalDate.now());
-        pembayaran.setTanggalKeluar(LocalDate.now().plusMonths(1));
-        pembayaran.setHargaPerBulan(kos.getHarga());
-        pembayaran.setTotalPembayaran(kos.getHarga()); // default 1 bulan
-
-        loadDataToForm();
-    }
-
-    private void loadDataToForm() {
-        if (pembayaran == null || pembayaran.getKos() == null || pembayaran.getUser() == null) return;
-
-        Kos kos = pembayaran.getKos();
-        User user = pembayaran.getUser();
-
-        tfNamaKos.setText(kos.getNama());
+    public void setOrderData(Kos kos) {
+        this.selectedKos = kos;
+        lblNamaKos.setText(kos.getNama());
         tfAlamatKos.setText(kos.getAlamat());
-        lbTipeKos.setText("Tipe: " + kos.getTipeKos());
-        lbNoKamar.setText("Kamar Tersedia: " + kos.getKamarTersedia());
+        lbTipeKos.setText(kos.getTipeKos());
+        tfHargaPerBulan.setText(String.valueOf((int)kos.getHarga()));
+        tfIDReservasi.setText("RSV-PROSES");
+        
+        KamarDAO kamarDAO = new KamarDAO();
+        cbPilihKamar.setItems(FXCollections.observableArrayList(kamarDAO.getKamarTersediaByKos(kos.getIdKos())));
+        
+        cbPilihKamar.setConverter(new StringConverter<Kamar>() {
+            @Override
+            public String toString(Kamar k) { return (k == null) ? "" : "Kamar No: " + k.getNomorKamar(); }
+            @Override
+            public Kamar fromString(String string) { return null; }
+        });
 
-        tfNamaPenyewa.setText(user.getNama());
-        tfEmail.setText(user.getEmail());
-        tfNoTelepon.setText(user.getNoTelepon());
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-        tfPeriodeSewa.setText(pembayaran.getTanggalMasuk().format(formatter)
-                + " - " + pembayaran.getTanggalKeluar().format(formatter));
-        tfDurasiSewa.setText("1 Bulan");
-        tfHargaSewa.setText(String.format("Rp %,.0f", pembayaran.getHargaPerBulan()));
-        tfTotalPembayaran.setText(String.format("Rp %,.0f", pembayaran.getTotalPembayaran()));
-    }
-
-    private void selectPaymentMethod(String method) {
-        pembayaranDipilih = method;
-        btTfBank.setStyle(tombol);
-        btEwallet.setStyle(tombol);
-        btQris.setStyle(tombol);
-
-        switch (method) {
-            case "Transfer Bank" -> btTfBank.setStyle(tombolDipilih);
-            case "E-Wallet" -> btEwallet.setStyle(tombolDipilih);
-            case "QRIS" -> btQris.setStyle(tombolDipilih);
-        }
-    }
-
-    private void handleKonfirmasiPembayaran() {
-        if (pembayaran == null) {
-            showAlert("Error", "Data pembayaran tidak tersedia!");
-            return;
-        }
-        if (pembayaranDipilih.isEmpty()) {
-            showAlert("Error", "Silakan pilih metode pembayaran terlebih dahulu!");
-            return;
-        }
-
-        pembayaran.setMetodePembayaran(pembayaranDipilih);
-        pembayaran.setStatus("BERHASIL"); // set status
-
-        // Insert ke database
-        PembayaranDAO dao = new PembayaranDAO();
-        dao.insert(pembayaran);
-
-        // Tampilkan halaman pembayaran sesuai metode
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/" + pembayaranDipilih.replace(" ", "") + ".fxml"));
-            Parent root = loader.load();
-
-            Object controller = loader.getController();
-            if (controller instanceof QrisController qris) {
-                qris.setPaymentViewController(this);
-                qris.setPembayaran(pembayaran);
+        tfDurasiSewa.setText("1");
+        kalkulasiTotal();
+        
+        tfDurasiSewa.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                tfDurasiSewa.setText(newValue.replaceAll("[^\\d]", ""));
             }
+            kalkulasiTotal();
+        });
+    }
+
+    private void kalkulasiTotal() {
+        try {
+            int bulan = Integer.parseInt(tfDurasiSewa.getText());
+            if (bulan <= 0) bulan = 1;
+            double total = selectedKos.getHarga() * bulan;
+            tfTotalPembayaran.setText(formatRupiah(total));
+        } catch (Exception e) {
+            tfTotalPembayaran.setText(formatRupiah(0));
+        }
+    }
+
+    private String formatRupiah(double val) {
+        return "Rp " + String.format("%,.0f", val);
+    }
+
+    @FXML private void handleSelectBank() { 
+        this.selectedMethod = "Transfer Bank";
+        openInstruction("/View/TransferBank.fxml", "Virtual Account", PembayaranHelper.generateVA(Session.getUser().getNoTelepon()));
+    }
+
+    @FXML private void handleSelectEmoney() { 
+        this.selectedMethod = "E-Money";
+        openInstruction("/View/emoney.fxml", "Instruksi E-Money", Helper.PembayaranHelper.generateEMoneyCode());
+    }
+    
+    @FXML private void handleSelectQRIS() { 
+        this.selectedMethod = "QRIS";
+        try {
+            Helper.PembayaranHelper.generateQRCode(Helper.PembayaranHelper.generateRandomQRContent(), 300, 300, "src/main/resources/images/temp_qr.png");
+            openInstruction("/View/Qris.fxml", "Scan QRIS Pembayaran", null);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void openInstruction(String fxmlPath, String title, String code) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+            double total = selectedKos.getHarga() * Integer.parseInt(tfDurasiSewa.getText());
+            Object ctrl = loader.getController();
+            if (ctrl instanceof TransferBankController) ((TransferBankController) ctrl).setData(total, code);
+            else if (ctrl instanceof EmoneyController) ((EmoneyController) ctrl).setData(total, code);
+            else if (ctrl instanceof QrisController) ((QrisController) ctrl).setData(total);
 
             Stage stage = new Stage();
-            stage.setTitle("Pembayaran " + pembayaranDipilih);
             stage.setScene(new Scene(root));
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
             stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
+    @FXML
+    private void handleKonfirmasiBayar() {
+        Kamar kamarTerpilih = cbPilihKamar.getSelectionModel().getSelectedItem();
+
+        if (selectedKos == null || selectedMethod.equals("Belum Dipilih") || tfDurasiSewa.getText().isEmpty() || kamarTerpilih == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Harap pilih nomor KAMAR dan METODE PEMBAYARAN!");
+            alert.show();
+            return;
+        }
+
+        Pembayaran bayar = new Pembayaran();
+        bayar.setUser(Session.getUser());
+        bayar.setKos(selectedKos);
+        bayar.setKamar(kamarTerpilih); 
+        bayar.setDurasiBulan(Integer.parseInt(tfDurasiSewa.getText()));
+        bayar.setTotalPembayaran(selectedKos.getHarga() * bayar.getDurasiBulan());
+        bayar.setMetodePembayaran(selectedMethod);
+        bayar.setStatus("BERHASIL");
+        bayar.setTanggalTransaksi(LocalDate.now());
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/konfirmasiPembayaran.fxml"));
+            Parent root = loader.load();
+            KonfirmasiPembayaranController ctrl = loader.getController();
+            ctrl.setKonfirmasiData(bayar, this); 
+
+            Stage stage = new Stage();
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) { e.printStackTrace(); }
+    }
     
+    public void setPembayaranUntukBerhasil(Pembayaran p) { this.pembayaranSelesai = p; }
+
     public void showPembayaranBerhasil() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/pembayaranBerhasil.fxml"));
             Parent root = loader.load();
-
-            PembayaranBerhasilController ctrl = loader.getController();
-            ctrl.setPembayaran(pembayaran); // kirim data pembayaran untuk ditampilkan
-
-            Stage stage = new Stage();
-            stage.setTitle("Pembayaran Berhasil");
+            PembayaranBerhasilController successCtrl = loader.getController();
+            successCtrl.setPembayaran(pembayaranSelesai); 
+            Stage stage = (Stage) mainContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setMaximized(true);
-            stage.show();
-
-            // Tutup halaman pembayaran lama
-            Stage currentStage = (Stage) btKonfirmasiPembayaran.getScene().getWindow();
-            currentStage.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        } catch (IOException e) { e.printStackTrace(); }
     }
 }

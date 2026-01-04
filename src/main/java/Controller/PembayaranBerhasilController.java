@@ -6,26 +6,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import Model.Pembayaran;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 public class PembayaranBerhasilController {
     
-    private static final String rupiah = "Rp %,.0f";
+    private static final String RUPIAH_FORMAT = "Rp %,.0f";
     
-    @FXML private TextField tfIDReservasi;
-    @FXML private TextField tfNamaKos;
-    @FXML private TextField tfAlamatKos;
-    @FXML private Label lbTipeKos;
-    @FXML private Label lbNoKamar;
-    @FXML private TextField tfNamaPenyewa;
-    @FXML private TextField tfTotalHarga;
-    @FXML private TextField tfMetodePembayaran;
+    @FXML private TextField tfIDReservasi, tfNamaKos, tfAlamatKos, tfNamaPenyewa, tfTotalHarga, tfMetodePembayaran;
+    @FXML private Label lbTipeKos, lbNoKamar, lbProgress1, lbProgress2, lbProgress3;
     @FXML private Button btPembayaranBerhasil;
-    @FXML private Label lbProgress1;
-    @FXML private Label lbProgress2;
-    @FXML private Label lbProgress3;
    
     private Pembayaran pembayaran;
    
+    @FXML
     public void initialize() {
         btPembayaranBerhasil.setOnAction(e -> handleSelesai());
         updateProgressIndicator();
@@ -39,31 +35,41 @@ public class PembayaranBerhasilController {
     private void displayData() {
         if (pembayaran == null) return;
         
-        // ID Reservasi bisa pakai ID Kos
-        tfIDReservasi.setText(pembayaran.getKos() != null ? String.valueOf(pembayaran.getKos().getIdKos()) : "-");
-        tfNamaKos.setText(pembayaran.getKos() != null ? pembayaran.getKos().getNama() : "-");
-        tfAlamatKos.setText(pembayaran.getKos() != null ? pembayaran.getKos().getAlamat() : "-");
-        lbTipeKos.setText("Tipe: " + (pembayaran.getKos() != null ? pembayaran.getKos().getTipeKos() : "-"));
-        lbNoKamar.setText("Kamar No. " + (pembayaran.getKos() != null ? pembayaran.getKos().getKamarTersedia() : "-"));
+        tfIDReservasi.setText("RSV-" + pembayaran.getIdPembayaran());
         
-        tfNamaPenyewa.setText(pembayaran.getUser() != null ? pembayaran.getUser().getNama() : "-");
-        tfTotalHarga.setText(String.format(rupiah, pembayaran.getTotalPembayaran()));
-        tfMetodePembayaran.setText(pembayaran.getMetodePembayaran() != null ? pembayaran.getMetodePembayaran() : "-");
+        if (pembayaran.getKos() != null) {
+            tfNamaKos.setText(pembayaran.getKos().getNama());
+            tfAlamatKos.setText(pembayaran.getKos().getAlamat());
+            lbTipeKos.setText("Tipe: " + pembayaran.getKos().getTipeKos());
+            lbNoKamar.setText("Kamar No: " + pembayaran.getKos().getIdKos());
+        }
+        
+        if (pembayaran.getUser() != null) {
+            tfNamaPenyewa.setText(pembayaran.getUser().getNama());
+        }
+        
+        tfTotalHarga.setText(String.format(RUPIAH_FORMAT, pembayaran.getTotalPembayaran()));
+        tfMetodePembayaran.setText(pembayaran.getMetodePembayaran());
     }
     
     private void updateProgressIndicator() {
         if (lbProgress1 != null) lbProgress1.setOpacity(1.0);
         if (lbProgress2 != null) lbProgress2.setOpacity(1.0);
-        if (lbProgress3 != null) lbProgress3.setOpacity(1.0);
+        if (lbProgress3 != null) {
+            lbProgress3.setOpacity(1.0);
+            lbProgress3.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-background-radius: 100;");
+        }
     }
     
     private void handleSelesai() {
-        System.out.println("Pembayaran selesai");
-        closeWindow();
-    }
-    
-    private void closeWindow() {
+    try {
+        Parent root = FXMLLoader.load(getClass().getResource("/View/Dashboard.fxml"));
         Stage stage = (Stage) btPembayaranBerhasil.getScene().getWindow();
-        stage.close();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Cozify - Dashboard");
+    } catch (IOException e) {
+        System.err.println("Gagal balik ke Dashboard: " + e.getMessage());
+        ((Stage) btPembayaranBerhasil.getScene().getWindow()).close();
     }
+}
 }

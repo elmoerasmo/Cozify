@@ -1,6 +1,7 @@
 package Controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
@@ -10,8 +11,10 @@ import javafx.stage.Stage;
 
 public class TransferBankController {
     
-    private static final String rupiah = "Rp %,.0f";
-    
+    private static final String RUPIAH_FORMAT = "Rp %,.0f";
+
+    @FXML private Label lblVirtualAccount;
+
     @FXML private Text tfNomorRekening;
     @FXML private TextField tFTransBank;
     @FXML private Button btKonfirmasiPembayaran;
@@ -20,8 +23,23 @@ public class TransferBankController {
     private PaymentViewController paymentViewController;
     
     public void initialize() {
-        btSalinRek.setOnAction(e -> copyNomorRekening());
-        btKonfirmasiPembayaran.setOnAction(e -> konfirmasiPembayaran());
+       btSalinRek.setOnAction(e -> {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent content = new ClipboardContent();
+            content.putString(tfNomorRekening.getText());
+            clipboard.setContent(content);
+            btSalinRek.setText("Tersalin!");
+        });
+        
+        btKonfirmasiPembayaran.setOnAction(e -> {
+            Stage stage = (Stage) btKonfirmasiPembayaran.getScene().getWindow();
+            stage.close();
+        });
+    }
+    
+    public void setData(double total, String vaNumber) {
+        this.tFTransBank.setText(String.format(RUPIAH_FORMAT, total));
+        this.tfNomorRekening.setText(vaNumber);
     }
     
     public void setPaymentViewController(PaymentViewController controller) {
@@ -29,7 +47,7 @@ public class TransferBankController {
     }
     
     public void setTotalPembayaran(double total) {
-        tFTransBank.setText(String.format(rupiah, total));
+        tFTransBank.setText(String.format(RUPIAH_FORMAT, total));
     }
     
     private void copyNomorRekening() {
@@ -50,6 +68,10 @@ public class TransferBankController {
         if (paymentViewController != null) {
             paymentViewController.showPembayaranBerhasil();
         }
+    }
+
+    public void setVaNumber(String va) {
+        lblVirtualAccount.setText(va);
     }
     
     private void closeWindow() {

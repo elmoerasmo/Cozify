@@ -1,4 +1,6 @@
 DAO\AdminDAO.class
+DAO\KamarDAO.class
+Controller\PaymentViewController$1.class
 Controller\KosCardController.class
 Controller\PembayaranBerhasilController.class
 Controller\OwnerDashboardController.class
@@ -12,6 +14,7 @@ Controller\ControllerWithUser.class
 Controller\QrisController.class
 Main\Main.class
 DAO\PembayaranDAO.class
+Model\Kamar.class
 Controller\PilihanFasilitasController.class
 Controller\EditProfileController.class
 Controller\DashboardController.class
@@ -26,6 +29,7 @@ Model\Favorit.class
 DAO\FavoritDAO.class
 Controller\AdminDashboardController.class
 Controller\TransferBankController.class
+Helper\PembayaranHelper.class
 Controller\KonfirmasiPembayaranController.class
 Controller\PaymentViewController.class
 Controller\HomepageController.class

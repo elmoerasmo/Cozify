@@ -1,39 +1,40 @@
 package DAO;
 
 import Model.Pembayaran;
+import Model.User;
+import Model.Kos;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class PembayaranDAO {
 
     public boolean insert(Pembayaran pembayaran) {
         if (pembayaran == null || pembayaran.getUser() == null || pembayaran.getKos() == null) {
-            System.err.println("Data pembayaran, user atau kos tidak lengkap!");
+            System.err.println("Gagal Insert: Data pembayaran, user, atau kos null!");
             return false;
         }
 
-        String sql = """
-            INSERT INTO pembayaran
-            (idUser, idKos, totalPembayaran, metodePembayaran, status, tanggalMasuk, tanggalKeluar)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """;
+        // Query disesuaikan dengan field durasiBulan dan tanggalTransaksi
+        String sql = "INSERT INTO pembayaran (idUser, idKos, durasiBulan, tanggalTransaksi, hargaPerBulan, totalPembayaran, metodePembayaran, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = BaseDAO.getCon();
              PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, pembayaran.getUser().getId());
             ps.setInt(2, pembayaran.getKos().getIdKos());
-            ps.setDouble(3, pembayaran.getTotalPembayaran());
-            ps.setString(4, pembayaran.getMetodePembayaran() != null ? pembayaran.getMetodePembayaran() : "");
-            ps.setString(5, pembayaran.getStatus() != null ? pembayaran.getStatus() : "PENDING");
-            ps.setObject(6, pembayaran.getTanggalMasuk());
-            ps.setObject(7, pembayaran.getTanggalKeluar());
+            ps.setInt(3, pembayaran.getDurasiBulan());
+            ps.setDate(4, Date.valueOf(LocalDate.now()));
+            ps.setDouble(5, pembayaran.getKos().getHarga());
+            ps.setDouble(6, pembayaran.getTotalPembayaran());
+            ps.setString(7, pembayaran.getMetodePembayaran() != null ? pembayaran.getMetodePembayaran() : "BELUM DIPILIH");
+            ps.setString(8, pembayaran.getStatus() != null ? pembayaran.getStatus() : "BERHASIL");
 
             int rows = ps.executeUpdate();
 
-            // Ambil auto-generated ID dan set ke object
             if (rows > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -44,15 +45,15 @@ public class PembayaranDAO {
             }
 
         } catch (SQLException e) {
+            System.err.println("Error insert Pembayaran: " + e.getMessage());
             e.printStackTrace();
         }
-
         return false;
     }
 
-   
+    
     public boolean updateStatus(int idPembayaran, String status) {
-        String sql = "UPDATE pembayaran SET status = ? WHERE id = ?";
+        String sql = "UPDATE pembayaran SET status = ? WHERE idPembayaran = ?";
         try (Connection conn = BaseDAO.getCon();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, status);
@@ -68,14 +69,13 @@ public class PembayaranDAO {
    
     public Pembayaran getById(int idPembayaran) {
         String sql = """
-            SELECT p.id, p.idUser, p.idKos, p.totalPembayaran, p.metodePembayaran,
-                   p.status, p.tanggalMasuk, p.tanggalKeluar,
-                   u.id AS userId, u.nama AS userNama, u.email AS userEmail, u.noTelepon AS userTelepon,
-                   k.idKos, k.nama AS kosNama, k.alamat AS kosAlamat, k.harga AS kosHarga
+            SELECT p.idPembayaran, p.idUser, p.idKos, p.durasiBulan, p.tanggalTransaksi, p.totalPembayaran, p.metodePembayaran, p.status,
+                   u.nama AS userNama, u.email AS userEmail, u.noTelepon AS userTelepon,
+                   k.nama AS kosNama, k.alamat AS kosAlamat, k.harga AS kosHarga
             FROM pembayaran p
             JOIN user u ON u.id = p.idUser
             JOIN kos k ON k.idKos = p.idKos
-            WHERE p.id = ?
+            WHERE p.idPembayaran = ?
         """;
 
         try (Connection conn = BaseDAO.getCon();
@@ -86,23 +86,21 @@ public class PembayaranDAO {
                 if (rs.next()) {
                     Pembayaran p = new Pembayaran();
 
-                    p.setIdPembayaran(rs.getInt("id"));
+                    p.setIdPembayaran(rs.getInt("idPembayaran"));
+                    p.setDurasiBulan(rs.getInt("durasiBulan"));
+                    p.setTanggalTransaksi(rs.getDate("tanggalTransaksi").toLocalDate());
                     p.setTotalPembayaran(rs.getDouble("totalPembayaran"));
                     p.setMetodePembayaran(rs.getString("metodePembayaran"));
                     p.setStatus(rs.getString("status"));
-                    p.setTanggalMasuk(rs.getObject("tanggalMasuk", java.time.LocalDate.class));
-                    p.setTanggalKeluar(rs.getObject("tanggalKeluar", java.time.LocalDate.class));
 
-                    // Set user
-                    Model.User user = new Model.User();
-                    user.setId(rs.getInt("userId"));
+                    User user = new User();
+                    user.setId(rs.getInt("idUser"));
                     user.setNama(rs.getString("userNama"));
                     user.setEmail(rs.getString("userEmail"));
                     user.setNoTelepon(rs.getString("userTelepon"));
                     p.setUser(user);
 
-                    // Set kos
-                    Model.Kos kos = new Model.Kos();
+                    Kos kos = new Kos();
                     kos.setIdKos(rs.getInt("idKos"));
                     kos.setNama(rs.getString("kosNama"));
                     kos.setAlamat(rs.getString("kosAlamat"));
@@ -112,11 +110,10 @@ public class PembayaranDAO {
                     return p;
                 }
             }
-
         } catch (SQLException e) {
+            System.err.println("Error getById Pembayaran: " + e.getMessage());
             e.printStackTrace();
         }
-
         return null;
     }
 }

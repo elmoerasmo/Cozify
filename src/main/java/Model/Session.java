@@ -16,14 +16,11 @@ public class Session {
         currentUser = user;
     }
 
-    // getter untuk ambil data user di controller lain
     public static User getUser() {
         return currentUser;
     }
 
-    // hapus session saat logout
     public static void clear() {
         currentUser = null;
     }
-
 }

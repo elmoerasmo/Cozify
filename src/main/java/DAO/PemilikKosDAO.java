@@ -52,9 +52,15 @@ public class PemilikKosDAO {
         return 0;
     }
 
-    public List<PemilikKos> getAllPemilikKos() {
+   public List<PemilikKos> getAllPemilikKos() {
         List<PemilikKos> list = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE role = 'OWNER' ORDER BY idUser DESC";
+        String query = "SELECT u.*, COUNT(k.idKos) as jumlahKos " +
+                       "FROM users u " +
+                       "LEFT JOIN kos k ON u.idUser = k.idPemilik " +
+                       "WHERE u.role = 'OWNER' " +
+                       "GROUP BY u.idUser " +
+                       "ORDER BY u.idUser DESC";
+
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
@@ -62,9 +68,9 @@ public class PemilikKosDAO {
                 p.setId(rs.getInt("idUser"));
                 p.setNama(rs.getString("username"));
                 p.setEmail(rs.getString("email"));
-                p.setNoTelepon(rs.getString("no_telepon"));
+                p.setNoTelepon(rs.getString("noTelepon"));
                 p.setStatus(rs.getString("status"));
-                p.setPassword(rs.getString("password"));
+                p.setJumlahKos(rs.getInt("jumlahKos")); 
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -75,7 +81,7 @@ public class PemilikKosDAO {
 
     public List<PemilikKos> getPendingPemilikKos() {
         List<PemilikKos> list = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE role = 'OWNER' AND status = 'Menunggu Verifikasi' ORDER BY tanggal_daftar DESC";
+        String query = "SELECT * FROM users WHERE role = 'OWNER' AND status = 'Menunggu Verifikasi' ORDER BY tanggalDaftar DESC";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
@@ -83,7 +89,7 @@ public class PemilikKosDAO {
                 p.setId(rs.getInt("idUser"));
                 p.setNama(rs.getString("username"));
                 p.setEmail(rs.getString("email"));
-                p.setNoTelepon(rs.getString("no_telepon"));
+                p.setNoTelepon(rs.getString("noTelepon"));
                 p.setStatus(rs.getString("status"));
                 list.add(p);
             }
@@ -105,7 +111,7 @@ public class PemilikKosDAO {
     }
 
     public boolean rejectPemilik(int id, String alasan) {
-        String query = "UPDATE users SET status = 'Ditolak', alasan_penolakan = ? WHERE idUser = ? AND role = 'OWNER'";
+        String query = "UPDATE users SET status = 'Ditolak', alasanPenolakan = ? WHERE idUser = ? AND role = 'OWNER'";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, alasan);
             pstmt.setInt(2, id);
@@ -128,7 +134,7 @@ public class PemilikKosDAO {
     }
 
     public boolean insertPemilik(PemilikKos pemilik) {
-        String query = "INSERT INTO users (username, email, no_telepon, password, role, status, tanggal_daftar) " +
+        String query = "INSERT INTO users (username, email, noTelepon, password, role, status, tanggalDaftar) " +
                        "VALUES (?, ?, ?, ?, 'OWNER', 'Menunggu Verifikasi', CURDATE())";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, pemilik.getNama());
@@ -143,7 +149,7 @@ public class PemilikKosDAO {
     }
 
     public boolean updatePemilik(PemilikKos pemilik) {
-        String query = "UPDATE users SET username = ?, email = ?, no_telepon = ? WHERE idUser = ? AND role = 'OWNER'";
+        String query = "UPDATE users SET username = ?, email = ?, noTelepon = ? WHERE idUser = ? AND role = 'OWNER'";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, pemilik.getNama());
             pstmt.setString(2, pemilik.getEmail());

@@ -41,14 +41,9 @@
                      </font>
                   </Button>
                   <Label layoutX="372.0" layoutY="-53.0" prefHeight="107.0" prefWidth="108.0" style="-fx-background-radius: 50; -fx-border-radius: 50; -fx-background-color: #B0D4E3;" />
-                  <ImageView fitHeight="90.0" fitWidth="93.0" layoutX="380.0" layoutY="-43.0">
+                  <ImageView fx:id="ivQris" fitHeight="180.0" fitWidth="180.0" layoutX="165.0" layoutY="-15.0">
                      <image>
-                        <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\Untitled design (1).png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="180.0" fitWidth="180.0" layoutX="165.0" layoutY="-15.0">
-                     <image>
-                        <Image url="@\D:\matkul mkb\semester 3\Pemrograman Lanjut\Project\pembayaranCozify\src\main\resources\Untitled design\barcode.png" />
+                        <Image url="@/images/temp_qr.png" />
                      </image>
                   </ImageView>
                   <Text layoutX="121.0" layoutY="161.0" opacity="0.8" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Pembayaran">

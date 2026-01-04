@@ -14,16 +14,16 @@ public class LaporanDAO {
         this.connection = BaseDAO.getCon();
     }
     
-    public double getPendapatanBulanIni(int ownerId) {
+    public double getPendapatanBulanIni(int idPemilik) {
         String query = "SELECT SUM(l.pemasukan) " +
                       "FROM laporan l " +
-                      "INNER JOIN kos k ON l.kos_id = k.id " +
-                      "WHERE k.pemilik_id = ? " +
+                      "INNER JOIN kos k ON l.idKos = k.idKos " +
+                      "WHERE k.idPemilik = ? " +
                       "AND MONTH(l.tanggal) = MONTH(CURDATE()) " +
                       "AND YEAR(l.tanggal) = YEAR(CURDATE())";
         
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, ownerId);
+            pstmt.setInt(1, idPemilik);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getDouble(1);
@@ -43,10 +43,10 @@ public class LaporanDAO {
     System.out.println("Periode: " + periode);
     System.out.println("Filter Kos: " + filterKos);
     
-    query.append("SELECT l.*, k.nama as nama_kos ")
+    query.append("SELECT l.*, k.nama as nama ")
          .append("FROM laporan l ")
-         .append("INNER JOIN kos k ON l.kos_id = k.id ")
-         .append("WHERE k.pemilik_id = ? ");
+         .append("INNER JOIN kos k ON l.idKos = k.idKos ")
+         .append("WHERE k.idPemilik = ? ");
     
     switch (periode) {
         case "Hari Ini":
@@ -101,10 +101,10 @@ public class LaporanDAO {
 
     public List<Laporan> getAllLaporanByOwner(int ownerId) {
         List<Laporan> list = new ArrayList<>();
-        String query = "SELECT l.*, k.nama as nama_kos " +
+        String query = "SELECT l.*, k.nama as nama " +
                       "FROM laporan l " +
-                      "INNER JOIN kos k ON l.kos_id = k.id " +
-                      "WHERE k.pemilik_id = ? " +
+                      "INNER JOIN kos k ON l.idKos = k.idKos " +
+                      "WHERE k.idPemilik = ? " +
                       "ORDER BY l.tanggal DESC";
         
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -121,10 +121,10 @@ public class LaporanDAO {
         return list;
     }
 
-    public boolean insertLaporan(Laporan laporan) {
-        String query = "INSERT INTO laporan (kos_id, tanggal, kategori, keterangan, pemasukan, pengeluaran) " +
-                      "VALUES (?, ?, ?, ?, ?, ?)";
-        
+   public boolean insertLaporan(Laporan laporan) {
+        String query = "INSERT INTO laporan (idKos, tanggal, kategori, keterangan, pemasukan, pengeluaran, namaPenyewa, metodePembayaran) " +
+                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, laporan.getKosId());
             pstmt.setDate(2, Date.valueOf(laporan.getTanggal()));
@@ -132,6 +132,9 @@ public class LaporanDAO {
             pstmt.setString(4, laporan.getKeterangan());
             pstmt.setDouble(5, laporan.getPemasukan());
             pstmt.setDouble(6, laporan.getPengeluaran());
+            // Tambahkan baris ini untuk mengisi field baru
+            pstmt.setString(7, laporan.getNamaPenyewa()); 
+            pstmt.setString(8, laporan.getMetodePembayaran());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -140,7 +143,7 @@ public class LaporanDAO {
     }
 
     public boolean updateLaporan(Laporan laporan) {
-        String query = "UPDATE laporan SET kos_id = ?, tanggal = ?, kategori = ?, " +
+        String query = "UPDATE laporan SET idKos = ?, tanggal = ?, kategori = ?, " +
                       "keterangan = ?, pemasukan = ?, pengeluaran = ? WHERE id = ?";
         
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -172,18 +175,16 @@ public class LaporanDAO {
     private Laporan extractLaporanFromResultSet(ResultSet rs) throws SQLException {
         Laporan laporan = new Laporan();
         laporan.setId(rs.getInt("id"));
-        laporan.setKosId(rs.getInt("kos_id"));
-        laporan.setNamaKos(rs.getString("nama_kos"));
-        
-        Date sqlDate = rs.getDate("tanggal");
-        if (sqlDate != null) {
-            laporan.setTanggal(sqlDate.toLocalDate());
-        }
-        
+        laporan.setKosId(rs.getInt("idKos"));
+        laporan.setNamaKos(rs.getString("nama"));
+        laporan.setTanggal(rs.getDate("tanggal").toLocalDate());
         laporan.setKategori(rs.getString("kategori"));
         laporan.setKeterangan(rs.getString("keterangan"));
         laporan.setPemasukan(rs.getDouble("pemasukan"));
         laporan.setPengeluaran(rs.getDouble("pengeluaran"));
+        // Tambahkan baris ini agar data muncul di TableView
+        laporan.setNamaPenyewa(rs.getString("namaPenyewa"));
+        laporan.setMetodePembayaran(rs.getString("metodePembayaran"));
         return laporan;
     }
 
