@@ -18,7 +18,6 @@ public class PembayaranDAO {
             return false;
         }
 
-        // Query disesuaikan dengan field durasiBulan dan tanggalTransaksi
         String sql = "INSERT INTO pembayaran (idUser, idKos, durasiBulan, tanggalTransaksi, hargaPerBulan, totalPembayaran, metodePembayaran, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = BaseDAO.getCon();

@@ -12,7 +12,6 @@
             this.con = BaseDAO.getCon();
         }
 
-        // Cek apakah email sudah terdaftar
         public boolean isEmailExist(String email) {
             String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -23,7 +22,6 @@
             return false;
         }
 
-        // Cek apakah username sudah digunakan
         public boolean isUsernameExist(String username) {
             String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -34,7 +32,6 @@
             return false;
         }
 
-        // Register user baru
         public boolean registerUser(User user) {
             if (isUsernameExist(user.getNama())) {
                 System.out.println("Username sudah digunakan!");
@@ -60,7 +57,6 @@
             return false;
         }
 
-        // Login user
         public User loginUser(String input, String password) {
             String sql = "SELECT idUser, username, email, role, password, status, noTelepon FROM users WHERE (username = ? OR email = ?) AND password = ?";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -95,7 +91,6 @@
             return false;
         }
 
-        // Ambil user berdasarkan id
         public User getUserById(int id) {
             String sql = "SELECT idUser, username, email, role, password FROM users WHERE idUser = ?";
             try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -114,7 +109,6 @@
             return null;
         }
 
-        // Ambil semua user
         public List<User> getAllUsers() {
             List<User> list = new ArrayList<>();
             String sql = "SELECT idUser, username, email, role, password FROM users ORDER BY idUser DESC";

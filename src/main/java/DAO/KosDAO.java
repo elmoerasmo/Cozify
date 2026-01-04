@@ -54,7 +54,7 @@ import java.util.List;
             stmt.setDouble(4, kos.getHarga());
             stmt.setString(5, kos.getTipeKos());
             stmt.setString(6, kos.getFasilitas());
-            stmt.setString(7, kos.getFoto()); // Simpan: src/images/nama.jpg
+            stmt.setString(7, kos.getFoto()); 
             stmt.setInt(8, kos.getIdKos());
             stmt.setInt(9, kos.getIdPemilik());
 

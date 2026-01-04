@@ -132,7 +132,6 @@ public class LaporanDAO {
             pstmt.setString(4, laporan.getKeterangan());
             pstmt.setDouble(5, laporan.getPemasukan());
             pstmt.setDouble(6, laporan.getPengeluaran());
-            // Tambahkan baris ini untuk mengisi field baru
             pstmt.setString(7, laporan.getNamaPenyewa()); 
             pstmt.setString(8, laporan.getMetodePembayaran());
             return pstmt.executeUpdate() > 0;
@@ -182,7 +181,6 @@ public class LaporanDAO {
         laporan.setKeterangan(rs.getString("keterangan"));
         laporan.setPemasukan(rs.getDouble("pemasukan"));
         laporan.setPengeluaran(rs.getDouble("pengeluaran"));
-        // Tambahkan baris ini agar data muncul di TableView
         laporan.setNamaPenyewa(rs.getString("namaPenyewa"));
         laporan.setMetodePembayaran(rs.getString("metodePembayaran"));
         return laporan;

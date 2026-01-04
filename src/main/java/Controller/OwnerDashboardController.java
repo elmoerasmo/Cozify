@@ -85,7 +85,6 @@ public class OwnerDashboardController implements Initializable {
         profileButton.setOnAction(e -> openProfile());
     }
     
-    // --- SETUP & LOAD DATA ---
 
     private void setupTables() {
         colTanggal.setCellValueFactory(cellData -> 
@@ -170,7 +169,6 @@ public class OwnerDashboardController implements Initializable {
         return card;
     }
 
-    // --- DIALOGS (SHOW DETAIL & FORM) ---
 
     private void showMyKosDetailDialog(Kos kos) {
         Stage dialog = new Stage();
@@ -329,7 +327,6 @@ public class OwnerDashboardController implements Initializable {
         });
     }
 
-    // --- HELPER METHODS ---
 
     private void saveImageToResources(File sourceFile) {
         try {
@@ -362,7 +359,6 @@ public class OwnerDashboardController implements Initializable {
         return badge;
     }
 
-    // --- EVENT HANDLERS ---
 
     @FXML private void handleTambahKos() { showKosForm(null); }
     

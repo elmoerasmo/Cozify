@@ -36,7 +36,7 @@ public class FavoritViewController implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/KosCard.fxml"));
                     Parent card = loader.load();
                     KosCardController controller = loader.getController();
-                    controller.setData(k); // Session akan otomatis tahu user
+                    controller.setData(k); 
                     vBoxFavorit.getChildren().add(card);
                 } catch (IOException e) {
                     e.printStackTrace();

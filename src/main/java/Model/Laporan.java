@@ -17,7 +17,6 @@ public class Laporan {
     public Laporan() {
     }
 
-    // Constructor lengkap (biasanya digunakan saat load dari Database)
     public Laporan(int id, int kosId, String namaKos, String namaPenyewa, LocalDate tanggal, String kategori, String keterangan, String metodePembayaran, double pemasukan, double pengeluaran) {
         this.id = id;
         this.kosId = kosId;
@@ -31,7 +30,6 @@ public class Laporan {
         this.pengeluaran = pengeluaran;
     }
 
-    // Constructor Praktis untuk Input Pemasukan (Saat user berhasil bayar)
     public Laporan(int kosId, String namaPenyewa, String keterangan, String metode, double nominal) {
         this.kosId = kosId;
         this.namaPenyewa = namaPenyewa;
@@ -43,8 +41,7 @@ public class Laporan {
         this.pengeluaran = 0;
     }
 
-    // --- GETTER & SETTER ---
-    // (Tambahkan getter setter untuk namaPenyewa dan metodePembayaran)
+    
 
     public String getNamaPenyewa() { return namaPenyewa; }
     public void setNamaPenyewa(String namaPenyewa) { this.namaPenyewa = namaPenyewa; }
@@ -52,7 +49,6 @@ public class Laporan {
     public String getMetodePembayaran() { return metodePembayaran; }
     public void setMetodePembayaran(String metodePembayaran) { this.metodePembayaran = metodePembayaran; }
 
-    // ... Getter & Setter lainnya tetap sama ...
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

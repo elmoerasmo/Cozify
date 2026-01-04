@@ -12,7 +12,6 @@ public class AdminDAO {
         this.con = BaseDAO.getCon();
     }
 
-    // Ambil semua pemilik kos
     public List<User> getAllOwners() {
         List<User> owners = new ArrayList<>();
         String sql = "SELECT id, nama, email, role, status FROM users WHERE role='OWNER'";

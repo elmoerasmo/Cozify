@@ -24,11 +24,11 @@ public class ProfileController {
 
     private final UserDAO userDAO = new UserDAO();
     private User currentUser;
-    private String source = "USER"; // Default sumber dari Dashboard User
+    private String source = "USER"; 
 
     public void setSource(String source) {
         this.source = source;
-        setupRoleButtons(); // Refresh tampilan tombol saat source diatur
+        setupRoleButtons(); 
     }
 
     @FXML
@@ -41,7 +41,6 @@ public class ProfileController {
     private void setupRoleButtons() {
         if (currentUser == null) return;
 
-        // Reset visibilitas
         btnRegisterOwner.setVisible(false);
         btnRegisterOwner.setManaged(false);
         btnOwnerDashboard.setVisible(false);
@@ -61,7 +60,6 @@ public class ProfileController {
                 btnOwnerDashboard.setVisible(true);
                 btnOwnerDashboard.setManaged(true);
                 
-                // Jika sudah di Owner Dashboard, tombol berfungsi untuk kembali ke User Dashboard
                 if ("OWNER_DASHBOARD".equals(source)) {
                     btnOwnerDashboard.setText("Kembali ke Dashboard User");
                     btnOwnerDashboard.setStyle("-fx-background-color: #4C7BFF; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;");
@@ -75,7 +73,6 @@ public class ProfileController {
             btnAdminDashboard.setVisible(true);
             btnAdminDashboard.setManaged(true);
             
-            // Jika sudah di Admin Dashboard, tombol berfungsi untuk kembali ke User Dashboard
             if ("ADMIN_DASHBOARD".equals(source)) {
                 btnAdminDashboard.setText("Kembali ke Dashboard User");
                 btnAdminDashboard.setStyle("-fx-background-color: #4C7BFF; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold;");
@@ -117,7 +114,6 @@ public class ProfileController {
             stage.show();
             handleClose();
 
-            // Tutup dashboard sebelumnya
             if (OwnerDashboardController.ownerStage != null) OwnerDashboardController.ownerStage.close();
             if (AdminDashboardController.adminStage != null) AdminDashboardController.adminStage.close();
             

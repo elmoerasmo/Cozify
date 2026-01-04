@@ -298,7 +298,6 @@ public class DashboardController implements Initializable {
         String selected = cbUrutkan.getValue();
         if (selected == null || kosList == null) return;
 
-        // Buat list baru untuk diurutkan agar tidak merusak data asli di kosList jika diperlukan
         List<Kos> sortedList = new ArrayList<>(kosList);
 
         switch (selected) {

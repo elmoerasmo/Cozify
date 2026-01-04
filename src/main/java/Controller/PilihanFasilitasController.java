@@ -16,7 +16,6 @@ public class PilihanFasilitasController implements Initializable {
     @FXML private CheckBox cbKMandiDalam, cbKlosetDuduk, cbKlosetJongkok, cbKMandiLuar, cbAirPanas, cbKasur, cbMejaBelajar, cbTV, cbLemari, cbAC, cbLaundry, cbWifi;
 
     
-    // List untuk menampung hasil pilihan yang akan diambil DashboardController
     private List<String> selectedFasilitas = new ArrayList<>();
 
     public List<String> getSelectedFasilitas() {

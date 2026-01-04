@@ -31,10 +31,8 @@ public class PembayaranHelper {
     
     public static void generateQRCode(String text, int width, int height, String filePath) throws Exception {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        // Bikin matrix bit buat QR Code
         BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
 
-        // Simpan jadi file gambar (PNG)
         Path path = FileSystems.getDefault().getPath(filePath);
         MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
     }

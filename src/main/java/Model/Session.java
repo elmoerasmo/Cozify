@@ -9,7 +9,7 @@ package Model;
  * @author LENOVO
  */
 public class Session {
-    private static User currentUser; // ini yang menyimpan session
+    private static User currentUser; 
 
     // setter untuk login
     public static void setUser(User user) {
